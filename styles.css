@@ -70,107 +70,108 @@ body {
 }
 
 /* Header */
+/* Header */
 .header {
+    padding: 20px 0;
+    border-bottom: 1px solid #ebebeb;
+    background: #fff;
     position: sticky;
     top: 0;
-    background: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(5px);
     z-index: 100;
-    padding: var(--spacing-md) 0;
-    border-bottom: 1px solid var(--border-color);
-    box-shadow: var(--shadow-sm);
 }
 
-.header nav {
+.header-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 40px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: var(--spacing-md);
-    position: relative;
 }
 
 .logo {
-    font-size: clamp(20px, 2vw, 24px);
+    font-size: 24px;
     font-weight: 700;
-    color: var(--primary-color);
+    color: #FF5A5F;
     text-decoration: none;
-    transition: color var(--transition-fast);
-    z-index: 101;
+    transition: color 0.3s ease;
 }
 
 .logo:hover {
-    color: var(--hover-color);
+    color: #e04e53;
+}
+
+.nav-wrapper {
+    display: flex;
+    align-items: center;
 }
 
 .nav-menu {
     display: flex;
-    gap: var(--spacing-lg);
+    gap: 30px;
     margin: 0 auto;
 }
 
 .nav-link {
-    color: var(--text-color);
+    color: #222;
     text-decoration: none;
     font-weight: 500;
-    font-size: clamp(13px, 1vw, 14px);
-    padding: var(--spacing-xs) var(--spacing-sm);
-    border-radius: var(--radius-sm);
-    transition: all var(--transition-fast);
+    font-size: 14px;
+    padding: 8px 12px;
+    border-radius: 25px;
+    transition: all 0.3s ease;
 }
 
 .nav-link:hover {
-    color: var(--primary-color);
-    background: rgba(255, 90, 95, 0.1);
+    background: #f7f7f7;
 }
 
-/* Бургер-меню */
-.burger {
-    display: none;
-    font-size: 24px;
-    background: none;
-    border: none;
-    cursor: pointer;
-    color: var(--text-color);
-    padding: var(--spacing-xs);
-    z-index: 101;
-}
-
-/* Buttons */
-.login-btn, .button {
-    padding: var(--spacing-sm) var(--spacing-md);
-    border-radius: var(--radius-md);
+/* Логин кнопка */
+.login-btn {
+    padding: 10px 20px;
+    background: transparent;
+    border: 1px solid #222;
+    border-radius: 25px;
     font-weight: 500;
     cursor: pointer;
-    transition: all var(--transition-fast);
-    border: none;
-    font-size: clamp(14px, 1vw, 16px);
-}
-
-.login-btn {
-    border: 1px solid var(--primary-color);
-    background: transparent;
-    color: var(--primary-color);
+    font-family: 'Poppins', sans-serif;
+    transition: background 0.3s ease, transform 0.2s ease;
 }
 
 .login-btn:hover {
-    background: var(--primary-color);
-    color: white;
-    transform: translateY(-1px);
+    background: #f7f7f7;
+    transform: translateY(-2px);
 }
 
-.button {
-    background: var(--primary-color);
-    color: white;
-    border-radius: var(--radius-md);
+/* Бургер кнопка (скрыта на десктоп) */
+.burger {
+    display: none;
+    background: transparent;
+    border: none;
+    font-size: 24px;
     cursor: pointer;
-    font-weight: 500;
-    transition: background-color var(--transition-fast), transform var(--transition-fast);
+    padding: 5px;
 }
 
-.button:hover {
-    background: var(--primary-color-dark);
-    transform: translateY(-1px);
+/* Кнопка загрузки */
+.button, .upload-btn {
+    padding: 14px 30px;
+    background: #FF5A5F;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: 'Poppins', sans-serif;
+    transition: background 0.3s ease, transform 0.2s ease;
 }
+
+.button:hover, .upload-btn:hover {
+    background: #e04e53;
+    transform: translateY(-2px);
+}
+
 
 /* Hero Section */
 .hero {

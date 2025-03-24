@@ -12,18 +12,20 @@
 </head>
 <body>
     <header class="header">
-        <nav class="container">
+        <div class="header-container">
             <a href="/" class="logo" aria-label="RFM Pro - Главная">RFM Pro</a>
-            <button class="burger" aria-label="Открыть меню">☰</button>
-            <div class="nav-menu">
-                <a href="#benefits" class="nav-link">Преимущества</a>
-                <a href="#how-it-works" class="nav-link">Как это работает</a>
-                <a href="#use-cases" class="nav-link">Применение</a>
-                <a href="#results" class="nav-link">Результаты</a>
-                <a href="#" id="pricing-trigger" class="nav-link">Тарифы</a>
+            <div class="nav-wrapper">
+                <button class="burger" aria-label="Открыть меню" aria-expanded="false" aria-controls="nav-menu">☰</button>
+                <div class="nav-menu" id="nav-menu">
+                    <a href="#benefits" class="nav-link">Преимущества</a>
+                    <a href="#how-it-works" class="nav-link">Как это работает</a>
+                    <a href="#use-cases" class="nav-link">Применение</a>
+                    <a href="#results" class="nav-link">Результаты</a>
+                    <a href="#" id="pricing-trigger" class="nav-link">Тарифы</a>
+                </div>
             </div>
-            <a href="#" class="login-btn">Войти</a>
-        </nav>
+            <button class="login-btn" onclick="alert('Вход в разработке')">Войти</button>
+        </div>
     </header>
 
     <!-- Pricing Modal -->
