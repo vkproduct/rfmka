@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="RFM Pro - современный инструмент для анализа клиентской базы малого бизнеса">
-    <title>RFM Pro - Анализ клиентов</title>
+    <title>RFM Pro - Анализ клиентской базы</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -14,12 +14,13 @@
     <header class="header">
         <nav class="container">
             <a href="/" class="logo" aria-label="RFM Pro - Главная">RFM Pro</a>
+            <button class="burger" aria-label="Открыть меню">☰</button>
             <div class="nav-menu">
                 <a href="#benefits" class="nav-link">Преимущества</a>
                 <a href="#how-it-works" class="nav-link">Как это работает</a>
                 <a href="#use-cases" class="nav-link">Применение</a>
                 <a href="#results" class="nav-link">Результаты</a>
-                <a href="#" class="nav-link" id="pricing-trigger">Тарифы</a>
+                <a href="#" id="pricing-trigger" class="nav-link">Тарифы</a>
             </div>
             <a href="#" class="login-btn">Войти</a>
         </nav>
@@ -97,21 +98,26 @@
                 <p class="subtitle">Загрузите данные о покупках и получите RFM-анализ</p>
             </section>
             
-            <section class="upload-section" aria-labelledby="upload-title">
-                <h2 id="upload-title" class="visually-hidden">Загрузка данных</h2>
-                <div class="upload-area" id="dropZone" role="button" tabindex="0" aria-label="Перетащите CSV файл сюда или кликните для выбора">
-                    <input type="file" id="fileInput" accept=".csv" class="file-input" aria-label="Выберите CSV файл">
-                    <div class="upload-content">
-                        <svg class="upload-icon" width="48" height="48" viewBox="0 0 24 24" aria-hidden="true">
-                            <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/>
-                        </svg>
-                        <p>Перетащите CSV файл сюда или кликните для выбора</p>
+            <!-- Секция загрузки данных -->
+            <section id="upload-section" class="section">
+                <div class="container">
+                    <h2>Загрузите ваши данные</h2>
+                    <div class="upload-area" id="dropZone">
+                        <input type="file" id="csv-file" accept=".csv">
+                        <p>Перетащите CSV сюда или кликните для выбора</p>
                     </div>
+                    <button id="upload-button" class="button">Загрузить CSV</button>
+                    <p class="help-text">CSV файл должен содержать колонки: client_id, date, amount</p>
                 </div>
-                <button class="analyze-btn" id="analyzeBtn" aria-label="Начать анализ данных">
-                    <span class="btn-text">Анализировать</span>
-                    <span class="btn-loader" aria-hidden="true"></span>
-                </button>
+            </section>
+
+            <!-- Секция анализа -->
+            <section id="analysis-section" class="section">
+                <div class="container">
+                    <h2>RFM Анализ</h2>
+                    <button id="analyze-button" class="button">Запустить анализ</button>
+                    <div id="results-container" class="results-grid"></div>
+                </div>
             </section>
 
             <section class="promo-section" aria-labelledby="benefits-title">
@@ -267,6 +273,9 @@
         </div>
     </footer>
 
+    <!-- Скрипты -->
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <script src="supabase-keys.js"></script>
     <script src="app.js"></script>
 </body>
 </html> 
