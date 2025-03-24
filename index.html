@@ -104,10 +104,20 @@
                     <h2>Загрузите ваши данные</h2>
                     <div class="upload-area" id="dropZone">
                         <input type="file" id="csv-file" accept=".csv">
-                        <p>Перетащите CSV сюда или кликните для выбора</p>
+                        <p>Перетащите CSV файл или нажмите для выбора</p>
                     </div>
-                    <button id="upload-button" class="button">Загрузить CSV</button>
-                    <p class="help-text">CSV файл должен содержать колонки: client_id, date, amount</p>
+                    <div class="file-format-info">
+                        <span>CSV должен содержать колонки: <code>client_id</code>, <code>date</code>, <code>amount</code></span>
+                        <span>Пример: <code>client_123,2023-05-15,5000</code></span>
+                    </div>
+                    <div class="file-type-helper">
+                        <span class="file-type-tag">CSV</span>
+                        <span class="file-type-tag">До 10 МБ</span>
+                    </div>
+                    <button id="upload-button" class="button">
+                        Загрузить CSV
+                        <div class="upload-progress"></div>
+                    </button>
                 </div>
             </section>
 
