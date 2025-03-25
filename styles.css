@@ -1,11 +1,11 @@
 :root {
     --primary-color: #FF5A5F;
-    --primary-color-dark: #e64044;
+    --primary-color-dark: #e04e53;
     --text-color: #222;
     --secondary-color: #717171;
-    --border-color: #ddd;
+    --border-color: #ebebeb;
     --background-color: #fff;
-    --hover-color: #ff7a7f;
+    --hover-color: #f7f7f7;
     --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.05);
     --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
     --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
@@ -19,13 +19,6 @@
     --spacing-md: 24px;
     --spacing-lg: 32px;
     --spacing-xl: 48px;
-    
-    /* Добавляем недостающие переменные */
-    --card-bg: #fff;
-    --card-bg-hover: #f7f7f7;
-    --text-color-dark: #eee;
-    --text-primary: var(--text-color);
-    --text-secondary: var(--secondary-color);
 }
 
 /* Reset & Base */
@@ -40,7 +33,7 @@ html {
 }
 
 body {
-    font-family: 'Inter', sans-serif;
+    font-family: 'Poppins', sans-serif;
     color: var(--text-color);
     line-height: 1.5;
     background-color: var(--background-color);
@@ -70,11 +63,10 @@ body {
 }
 
 /* Header */
-/* Header */
 .header {
     padding: 20px 0;
-    border-bottom: 1px solid #ebebeb;
-    background: #fff;
+    border-bottom: 1px solid var(--border-color);
+    background: var(--background-color);
     position: sticky;
     top: 0;
     z-index: 100;
@@ -92,13 +84,13 @@ body {
 .logo {
     font-size: 24px;
     font-weight: 700;
-    color: #FF5A5F;
+    color: var(--primary-color);
     text-decoration: none;
-    transition: color 0.3s ease;
+    transition: color var(--transition-fast);
 }
 
 .logo:hover {
-    color: #e04e53;
+    color: var(--primary-color-dark);
 }
 
 .nav-wrapper {
@@ -113,33 +105,33 @@ body {
 }
 
 .nav-link {
-    color: #222;
+    color: var(--text-color);
     text-decoration: none;
     font-weight: 500;
     font-size: 14px;
     padding: 8px 12px;
     border-radius: 25px;
-    transition: all 0.3s ease;
+    transition: all var(--transition-fast);
 }
 
 .nav-link:hover {
-    background: #f7f7f7;
+    background: var(--hover-color);
 }
 
 /* Логин кнопка */
 .login-btn {
     padding: 10px 20px;
     background: transparent;
-    border: 1px solid #222;
+    border: 1px solid var(--text-color);
     border-radius: 25px;
     font-weight: 500;
     cursor: pointer;
     font-family: 'Poppins', sans-serif;
-    transition: background 0.3s ease, transform 0.2s ease;
+    transition: background var(--transition-fast), transform var(--transition-fast);
 }
 
 .login-btn:hover {
-    background: #f7f7f7;
+    background: var(--hover-color);
     transform: translateY(-2px);
 }
 
@@ -153,26 +145,6 @@ body {
     padding: 5px;
 }
 
-/* Кнопка загрузки */
-.button, .upload-btn {
-    padding: 14px 30px;
-    background: #FF5A5F;
-    color: #fff;
-    border: none;
-    border-radius: 8px;
-    font-size: 16px;
-    font-weight: 600;
-    cursor: pointer;
-    font-family: 'Poppins', sans-serif;
-    transition: background 0.3s ease, transform 0.2s ease;
-}
-
-.button:hover, .upload-btn:hover {
-    background: #e04e53;
-    transform: translateY(-2px);
-}
-
-
 /* Hero Section */
 .hero {
     text-align: center;
@@ -180,7 +152,7 @@ body {
 }
 
 h1 {
-    font-size: clamp(28px, 5vw, 48px);
+    font-size: clamp(28px, 5vw, 40px);
     font-weight: 700;
     margin-bottom: var(--spacing-md);
     line-height: 1.2;
@@ -188,11 +160,20 @@ h1 {
 
 .subtitle {
     color: var(--secondary-color);
-    font-size: clamp(16px, 2vw, 20px);
+    font-size: clamp(16px, 2vw, 18px);
     margin-bottom: var(--spacing-xl);
     max-width: 600px;
     margin-left: auto;
     margin-right: auto;
+}
+
+/* Section Headers */
+h2 {
+    font-size: clamp(24px, 3vw, 32px);
+    font-weight: 700;
+    margin-bottom: var(--spacing-lg);
+    color: var(--text-color);
+    text-align: center;
 }
 
 /* Upload Section */
@@ -202,12 +183,12 @@ h1 {
 
 .upload-area {
     border: 2px dashed var(--border-color);
-    border-radius: var(--radius-md);
-    padding: var(--spacing-xl);
+    border-radius: 8px;
+    padding: 30px;
     text-align: center;
     cursor: pointer;
     transition: all var(--transition-fast);
-    background: var(--card-bg);
+    background: var(--hover-color);
     margin: var(--spacing-md) 0;
     position: relative;
     display: flex;
@@ -215,28 +196,26 @@ h1 {
     align-items: center;
     justify-content: center;
     min-height: 160px;
-    box-shadow: var(--shadow-sm);
 }
 
 .upload-area::before {
     content: "📄";
     font-size: 36px;
-    margin-bottom: var(--spacing-sm);
+    margin-bottom: 12px;
     opacity: 0.7;
 }
 
 .upload-area:hover {
     border-color: var(--primary-color);
-    background: var(--card-bg-hover);
-    box-shadow: var(--shadow-md);
-    transform: translateY(-2px);
+    background: var(--background-color);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
 }
 
 .upload-area.dragover {
     border-color: var(--primary-color);
-    background: rgba(255, 90, 95, 0.1);
+    background: rgba(255, 90, 95, 0.05);
     transform: scale(1.02);
-    box-shadow: 0 0 0 4px rgba(255, 90, 95, 0.2), var(--shadow-md);
+    box-shadow: 0 0 0 4px rgba(255, 90, 95, 0.1), 0 8px 20px rgba(0, 0, 0, 0.1);
 }
 
 .upload-area input[type="file"] {
@@ -244,68 +223,34 @@ h1 {
 }
 
 .upload-area p {
-    margin: var(--spacing-sm) 0 0;
-    color: var(--text-secondary);
-    overflow-wrap: break-word;
-    word-wrap: break-word;
-    font-weight: 500;
-}
-
-.upload-area::after {
-    content: "Поддерживается только CSV формат";
-    display: block;
-    font-size: 12px;
+    margin: 12px 0 0;
     color: var(--secondary-color);
-    margin-top: var(--spacing-md);
-    opacity: 0.8;
-}
-
-.help-text {
-    color: var(--text-secondary);
-    font-size: clamp(12px, 1vw, 14px);
-    margin-top: var(--spacing-sm);
-}
-
-/* Upload Container */
-.upload-container {
-    display: flex;
-    gap: var(--spacing-md);
-    align-items: center;
-    margin: var(--spacing-lg) 0;
-}
-
-/* Кнопка загрузки */
-#upload-button {
-    position: relative;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 12px rgba(255, 90, 95, 0.2);
-}
-
-#upload-button::before {
-    content: "⬆️";
-    margin-right: var(--spacing-xs);
+    font-weight: 500;
     font-size: 16px;
 }
 
-#upload-button:hover {
-    box-shadow: 0 6px 16px rgba(255, 90, 95, 0.3);
-    transform: translateY(-3px);
+/* File Info Helpers */
+.file-format-info {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xs);
+    margin-top: var(--spacing-md);
+    font-size: 13px;
+    color: var(--secondary-color);
+    text-align: center;
+    max-width: 80%;
+    margin-left: auto;
+    margin-right: auto;
 }
 
-#upload-button:active {
-    transform: translateY(-1px);
-    box-shadow: 0 2px 8px rgba(255, 90, 95, 0.2);
+.file-format-info code {
+    background: rgba(0, 0, 0, 0.05);
+    padding: 2px 4px;
+    border-radius: 3px;
+    font-family: monospace;
+    font-size: 12px;
 }
 
-.file-selected #upload-button {
-    background-color: #27ae60;
-}
-
-/* File Type Helper */
 .file-type-helper {
     display: flex;
     flex-wrap: wrap;
@@ -321,35 +266,49 @@ h1 {
     padding: 4px 8px;
     border-radius: 4px;
     font-size: 13px;
-    color: var(--text-secondary);
+    color: var(--secondary-color);
 }
 
-.file-format-info {
-    display: flex;
-    flex-direction: column;
-    gap: var(--spacing-xs);
-    margin-top: var(--spacing-md);
-    font-size: 13px;
-    color: var(--text-secondary);
+/* Buttons */
+.button, .upload-btn, #upload-button, .pricing-btn {
+    padding: 14px 30px;
+    background: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: 'Poppins', sans-serif;
+    transition: background var(--transition-fast), transform var(--transition-fast), box-shadow var(--transition-fast);
     text-align: center;
-    max-width: 80%;
-    margin-left: auto;
-    margin-right: auto;
+    position: relative;
+    overflow: hidden;
 }
 
-.file-format-info code {
-    background: rgba(0, 0, 0, 0.05);
-    padding: 2px 4px;
-    border-radius: 3px;
-    font-family: monospace;
-    font-size: 12px;
+.button:hover, .upload-btn:hover, #upload-button:hover, .pricing-btn:hover {
+    background: var(--primary-color-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(255, 90, 95, 0.2);
+}
+
+.button:active, .upload-btn:active, #upload-button:active, .pricing-btn:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 6px rgba(255, 90, 95, 0.1);
+}
+
+/* Кнопка загрузки (с иконкой) */
+#upload-button::before {
+    content: "⬆️";
+    margin-right: 8px;
+    font-size: 18px;
 }
 
 /* Прогресс загрузки */
 .upload-progress {
     height: 4px;
     width: 0;
-    background: var(--primary-color);
+    background: rgba(255, 255, 255, 0.5);
     position: absolute;
     bottom: 0;
     left: 0;
@@ -361,29 +320,68 @@ h1 {
 }
 
 @keyframes progress {
-    0% {
-        width: 0;
-    }
-    50% {
-        width: 70%;
-    }
-    100% {
-        width: 100%;
-    }
+    0% { width: 0; }
+    50% { width: 70%; }
+    100% { width: 100%; }
+}
+
+/* Results Grid */
+.results-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: var(--spacing-md);
+    margin-top: var(--spacing-lg);
+}
+
+.result-card {
+    background: white;
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: var(--shadow-sm);
+    transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+    animation: slideUp 0.5s ease;
+}
+
+.result-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-md);
+}
+
+.result-card h3 {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--text-color);
+    margin-bottom: 10px;
+}
+
+.result-card p {
+    font-size: 14px;
+    color: var(--secondary-color);
+    margin: 5px 0;
+}
+
+@keyframes slideUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* No Results */
+.no-results {
+    text-align: center;
+    padding: var(--spacing-lg);
+    color: var(--secondary-color);
+    background: var(--hover-color);
+    border-radius: var(--radius-md);
+    grid-column: 1 / -1;
 }
 
 /* Promo Section */
 .promo-section {
     margin: var(--spacing-xl) 0;
     padding: var(--spacing-xl) 0;
-    background: #f8f8f8;
-    border-radius: 0;
-    width: 100vw;
-    position: relative;
-    left: 50%;
-    right: 50%;
-    margin-left: -50vw;
-    margin-right: -50vw;
+    background: var(--hover-color);
+    width: 100%; /* Гарантирует, что фон будет на всю ширину */
 }
 
 .promo-section .container {
@@ -394,24 +392,18 @@ h1 {
 
 .promo-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     gap: var(--spacing-lg);
-    margin-bottom: var(--spacing-xl);
-    max-width: 1200px;
-    margin-left: auto;
-    margin-right: auto;
+    margin-bottom: 0; /* Убираем нижний отступ */
 }
 
 .promo-card {
-    background: var(--card-bg);
+    background: white;
     padding: var(--spacing-lg);
-    border-radius: var(--radius-md);
+    border-radius: 12px;
     box-shadow: var(--shadow-sm);
     transition: all var(--transition-normal);
     max-width: 100%;
-    overflow-wrap: break-word;
-    word-wrap: break-word;
-    hyphens: auto;
 }
 
 .promo-card:hover {
@@ -425,46 +417,36 @@ h1 {
 }
 
 .promo-card h3 {
-    font-size: clamp(18px, 2vw, 20px);
+    font-size: 20px;
     margin-bottom: var(--spacing-sm);
     color: var(--text-color);
-    overflow: hidden;
-    text-overflow: ellipsis;
 }
 
 .promo-card p {
     color: var(--secondary-color);
-    font-size: clamp(13px, 1vw, 14px);
+    font-size: 14px;
     line-height: 1.6;
 }
 
 /* How it works */
 .how-it-works {
-    text-align: center;
     margin: var(--spacing-xl) 0;
-}
-
-.how-it-works h2 {
-    font-size: clamp(24px, 3vw, 32px);
-    margin-bottom: var(--spacing-xl);
-    color: var(--text-color);
+    text-align: center;
 }
 
 .steps {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     gap: var(--spacing-lg);
 }
 
 .step {
-    background: var(--card-bg);
+    background: white;
     padding: var(--spacing-lg);
-    border-radius: var(--radius-md);
+    border-radius: 12px;
     box-shadow: var(--shadow-sm);
     transition: all var(--transition-normal);
-    overflow-wrap: break-word;
-    word-wrap: break-word;
-    hyphens: auto;
+    border: 1px solid var(--border-color);
 }
 
 .step:hover {
@@ -486,131 +468,23 @@ h1 {
 }
 
 .step h3 {
-    font-size: clamp(16px, 2vw, 18px);
+    font-size: 18px;
     margin-bottom: var(--spacing-sm);
     color: var(--text-color);
-    overflow: hidden;
-    text-overflow: ellipsis;
 }
 
 .step p {
     color: var(--secondary-color);
-    font-size: clamp(13px, 1vw, 14px);
+    font-size: 14px;
     line-height: 1.6;
-}
-
-/* Result Section */
-.result-section {
-    text-align: center;
-    margin: var(--spacing-xl) 0;
-}
-
-.result-section h2 {
-    font-size: clamp(24px, 3vw, 32px);
-    margin-bottom: var(--spacing-xl);
-    color: var(--text-color);
-}
-
-.result-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
-    gap: var(--spacing-lg);
-}
-
-.result-item {
-    background: var(--card-bg);
-    padding: var(--spacing-lg);
-    border-radius: var(--radius-md);
-    box-shadow: var(--shadow-sm);
-    transition: all var(--transition-normal);
-    overflow-wrap: break-word;
-    word-wrap: break-word;
-    hyphens: auto;
-}
-
-.result-item:hover {
-    transform: translateY(-5px);
-    box-shadow: var(--shadow-md);
-}
-
-.result-icon {
-    font-size: 32px;
-    margin-bottom: var(--spacing-md);
-}
-
-.result-item h3 {
-    font-size: clamp(16px, 2vw, 18px);
-    margin-bottom: var(--spacing-sm);
-    color: var(--text-color);
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-.result-item p {
-    color: var(--secondary-color);
-    font-size: clamp(13px, 1vw, 14px);
-    line-height: 1.6;
-}
-
-/* Results Section (для динамически создаваемых результатов) */
-.results-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr));
-    gap: var(--spacing-md);
-    margin-top: var(--spacing-lg);
-}
-
-.result-card {
-    background: var(--card-bg);
-    border-radius: var(--radius-md);
-    padding: var(--spacing-md);
-    box-shadow: var(--shadow-sm);
-    animation: slideUp var(--transition-normal);
-    overflow-wrap: break-word;
-    word-wrap: break-word;
-    hyphens: auto;
-    transition: transform var(--transition-fast);
-}
-
-.result-card:hover {
-    transform: translateY(-2px);
-}
-
-.result-card h3 {
-    margin: 0 0 var(--spacing-sm);
-    color: var(--text-primary);
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-.result-card p {
-    margin: var(--spacing-xs) 0;
-    color: var(--text-secondary);
-}
-
-@keyframes slideUp {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
 }
 
 /* Use Cases Section */
 .use-cases {
     margin: var(--spacing-xl) 0;
     padding: var(--spacing-xl) 0;
-    background: #f8f8f8;
-    border-radius: 0;
-    width: 100vw;
-    position: relative;
-    left: 50%;
-    right: 50%;
-    margin-left: -50vw;
-    margin-right: -50vw;
+    background: var(--hover-color);
+    width: 100%; /* Гарантирует, что фон будет на всю ширину */
 }
 
 .use-cases .container {
@@ -619,32 +493,20 @@ h1 {
     padding: 0 var(--spacing-md);
 }
 
-.use-cases h2 {
-    text-align: center;
-    font-size: clamp(24px, 3vw, 32px);
-    margin-bottom: var(--spacing-xl);
-    color: var(--text-color);
-}
-
 .use-cases-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     gap: var(--spacing-lg);
-    max-width: 1200px;
-    margin-left: auto;
-    margin-right: auto;
 }
 
 .use-case-card {
-    background: var(--card-bg);
+    background: white;
     padding: var(--spacing-lg);
-    border-radius: var(--radius-md);
+    border-radius: 12px;
     box-shadow: var(--shadow-sm);
     transition: all var(--transition-normal);
     max-width: 100%;
-    overflow-wrap: break-word;
-    word-wrap: break-word;
-    hyphens: auto;
+    border: 1px solid var(--border-color);
 }
 
 .use-case-card:hover {
@@ -658,11 +520,9 @@ h1 {
 }
 
 .use-case-card h3 {
-    font-size: clamp(18px, 2vw, 20px);
+    font-size: 20px;
     margin-bottom: var(--spacing-md);
     color: var(--text-color);
-    overflow: hidden;
-    text-overflow: ellipsis;
 }
 
 .use-case-card ul {
@@ -672,7 +532,7 @@ h1 {
 
 .use-case-card li {
     color: var(--secondary-color);
-    font-size: clamp(13px, 1vw, 14px);
+    font-size: 14px;
     line-height: 1.6;
     margin-bottom: var(--spacing-xs);
     padding-left: var(--spacing-md);
@@ -687,12 +547,56 @@ h1 {
     font-weight: bold;
 }
 
+/* Result Section */
+.result-section {
+    text-align: center;
+    margin: var(--spacing-xl) 0;
+}
+
+.result-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: var(--spacing-lg);
+}
+
+.result-item {
+    background: white;
+    padding: var(--spacing-lg);
+    border-radius: 12px;
+    box-shadow: var(--shadow-sm);
+    transition: all var(--transition-normal);
+    border: 1px solid var(--border-color);
+}
+
+.result-item:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-md);
+}
+
+.result-icon {
+    font-size: 32px;
+    margin-bottom: var(--spacing-md);
+}
+
+.result-item h3 {
+    font-size: 18px;
+    margin-bottom: var(--spacing-sm);
+    color: var(--text-color);
+}
+
+.result-item p {
+    color: var(--secondary-color);
+    font-size: 14px;
+    line-height: 1.6;
+}
+
 /* Footer */
 .footer {
     background: #1a1a1a;
     padding: var(--spacing-xl) 0 var(--spacing-md);
     margin-top: var(--spacing-xl);
     border-top: 1px solid #333;
+    color: white;
 }
 
 .footer-grid {
@@ -703,16 +607,15 @@ h1 {
 }
 
 .footer-info h3 {
-    font-size: clamp(20px, 2vw, 24px);
+    font-size: 24px;
     margin-bottom: var(--spacing-md);
-    color: #fff;
+    color: white;
 }
 
 .footer-info p {
     color: #a0a0a0;
     margin-bottom: var(--spacing-md);
     line-height: 1.6;
-    font-size: clamp(13px, 1vw, 14px);
 }
 
 .footer-rfm-list {
@@ -724,17 +627,16 @@ h1 {
     color: #a0a0a0;
     margin-bottom: var(--spacing-sm);
     line-height: 1.6;
-    font-size: clamp(13px, 1vw, 14px);
 }
 
 .footer-rfm-list strong {
-    color: #fff;
+    color: white;
 }
 
 .footer-links h4 {
-    font-size: clamp(16px, 1.5vw, 18px);
+    font-size: 18px;
     margin-bottom: var(--spacing-md);
-    color: #fff;
+    color: white;
 }
 
 .footer-links ul {
@@ -750,7 +652,6 @@ h1 {
     color: #a0a0a0;
     text-decoration: none;
     transition: all var(--transition-normal);
-    font-size: clamp(13px, 1vw, 14px);
 }
 
 .footer-links a:hover {
@@ -766,7 +667,7 @@ h1 {
 
 .footer-bottom p {
     color: #a0a0a0;
-    font-size: clamp(12px, 1vw, 14px);
+    font-size: 14px;
 }
 
 /* Modal */
@@ -781,27 +682,28 @@ h1 {
     backdrop-filter: blur(5px);
     z-index: 1000;
     opacity: 0;
-    transition: opacity var(--transition-normal);
+    transition: opacity 0.3s ease;
+    justify-content: center;
+    align-items: center;
 }
 
 .modal.active {
     display: flex;
-    align-items: center;
-    justify-content: center;
     opacity: 1;
 }
 
 .modal-content {
-    background: var(--background-color);
-    border-radius: var(--radius-lg);
-    padding: var(--spacing-xl);
+    background: white;
+    border-radius: 12px;
+    padding: 40px;
     width: 90%;
     max-width: 1000px;
     position: relative;
     transform: translateY(20px);
-    transition: transform var(--transition-normal);
+    transition: transform 0.3s ease;
     max-height: 90vh;
     overflow-y: auto;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
 }
 
 .modal.active .modal-content {
@@ -810,40 +712,46 @@ h1 {
 
 .modal-close {
     position: absolute;
-    top: var(--spacing-md);
-    right: var(--spacing-md);
+    top: 20px;
+    right: 20px;
     background: none;
     border: none;
     font-size: 24px;
     color: var(--secondary-color);
     cursor: pointer;
-    padding: var(--spacing-xs);
-    line-height: 1;
-    transition: color var(--transition-fast);
+    transition: color 0.3s ease;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
 }
 
 .modal-close:hover {
     color: var(--primary-color);
+    background: var(--hover-color);
 }
 
 .modal h2 {
     text-align: center;
-    margin-bottom: var(--spacing-lg);
+    margin-bottom: 30px;
     color: var(--text-color);
-    font-size: clamp(22px, 2.5vw, 28px);
+    font-size: 28px;
+    font-weight: 700;
 }
 
 /* Pricing Grid */
 .pricing-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     gap: var(--spacing-md);
     align-items: stretch;
 }
 
 .pricing-card {
-    background: var(--card-bg);
-    border-radius: var(--radius-md);
+    background: white;
+    border-radius: 12px;
     padding: var(--spacing-lg);
     box-shadow: var(--shadow-sm);
     transition: all var(--transition-normal);
@@ -852,9 +760,6 @@ h1 {
     display: flex;
     flex-direction: column;
     height: 100%;
-    overflow-wrap: break-word;
-    word-wrap: break-word;
-    hyphens: auto;
 }
 
 .pricing-card:hover {
@@ -875,7 +780,7 @@ h1 {
     color: white;
     padding: var(--spacing-xs) var(--spacing-sm);
     border-radius: var(--radius-sm);
-    font-size: clamp(12px, 1vw, 14px);
+    font-size: 14px;
     font-weight: 500;
 }
 
@@ -885,26 +790,24 @@ h1 {
 }
 
 .pricing-header h3 {
-    font-size: clamp(18px, 2vw, 20px);
+    font-size: 20px;
     margin-bottom: var(--spacing-sm);
     color: var(--text-color);
-    overflow: hidden;
-    text-overflow: ellipsis;
 }
 
 .price {
-    font-size: clamp(28px, 3vw, 32px);
+    font-size: 32px;
     font-weight: 700;
     color: var(--text-color);
 }
 
 .price .currency {
-    font-size: clamp(16px, 1.5vw, 20px);
+    font-size: 20px;
     vertical-align: super;
 }
 
 .price .period {
-    font-size: clamp(12px, 1vw, 14px);
+    font-size: 14px;
     color: var(--secondary-color);
     font-weight: normal;
 }
@@ -922,7 +825,7 @@ h1 {
     border-bottom: 1px solid var(--border-color);
     display: flex;
     align-items: center;
-    font-size: clamp(13px, 1vw, 14px);
+    font-size: 14px;
 }
 
 .pricing-features li:last-child {
@@ -936,35 +839,155 @@ h1 {
     font-weight: bold;
 }
 
-.pricing-btn {
-    width: 100%;
-    padding: var(--spacing-sm);
-    border: none;
-    border-radius: var(--radius-md);
-    background: var(--primary-color);
+/* Notifications */
+.error-message, .success-message {
+    padding: 10px 15px;
+    border-radius: 4px;
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1000;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    animation: slideIn 0.3s forwards;
+}
+
+.error-message {
+    background: #ff5a5f;
     color: white;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all var(--transition-normal);
-    margin-top: auto;
-    font-size: clamp(14px, 1vw, 16px);
 }
 
-.pricing-btn:hover {
-    background: var(--hover-color);
-    transform: translateY(-2px);
+.success-message {
+    background: #27ae60;
+    color: white;
 }
 
-/* Медиа-запросы */
+@keyframes slideIn {
+    from { transform: translateX(100%); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+}
 
-/* Для очень маленьких экранов */
+@keyframes slideOut {
+    from { transform: translateX(0); opacity: 1; }
+    to { transform: translateX(100%); opacity: 0; }
+}
+
+/* Адаптивность */
+@media (max-width: 1024px) {
+    .header-container {
+        padding: 0 30px;
+    }
+    
+    .container {
+        padding: 0 30px;
+    }
+    
+    .footer-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+    
+    .footer-info {
+        grid-column: span 2;
+    }
+}
+
+@media (max-width: 768px) {
+    .header-container {
+        padding: 0 20px;
+    }
+    
+    .container {
+        padding: 0 20px;
+    }
+    
+    .burger {
+        display: block;
+        margin-right: 20px;
+    }
+    
+    .nav-menu {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: white;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        z-index: 100;
+    }
+    
+    .nav-menu.active {
+        display: flex;
+    }
+    
+    .nav-link {
+        font-size: 18px;
+        padding: 15px;
+        width: 100%;
+        text-align: center;
+    }
+    
+    .upload-area {
+        padding: 25px;
+        min-height: 140px;
+    }
+    
+    .upload-area::before {
+        font-size: 30px;
+    }
+    
+    .file-format-info {
+        max-width: 100%;
+    }
+    
+    .modal-content {
+        padding: 30px;
+        max-height: 85vh;
+    }
+    
+    .modal h2 {
+        font-size: 24px;
+        margin-bottom: 25px;
+    }
+    
+    .modal-close {
+        top: 15px;
+        right: 15px;
+    }
+    
+    .footer-grid {
+        grid-template-columns: 1fr;
+        gap: var(--spacing-lg);
+    }
+    
+    .footer-info {
+        grid-column: auto;
+        text-align: center;
+    }
+    
+    .footer-links {
+        text-align: center;
+    }
+
+    .promo-section, .use-cases {
+        padding: var(--spacing-lg) 0;
+    }
+
+    .promo-section .container,
+    .use-cases .container {
+        padding: 0 var(--spacing-sm);
+    }
+}
+
 @media (max-width: 480px) {
-    :root {
-        --spacing-xs: 4px;
-        --spacing-sm: 8px;
-        --spacing-md: 16px;
-        --spacing-lg: 24px;
-        --spacing-xl: 32px;
+    .header-container {
+        padding: 0 15px;
+    }
+    
+    .container {
+        padding: 0 15px;
     }
     
     h1 {
@@ -975,85 +998,28 @@ h1 {
         font-size: 16px;
     }
     
-    .container {
-        padding: 0 var(--spacing-xs);
-    }
-    
-    .modal-content {
-        padding: var(--spacing-sm);
-    }
-    
-    .modal h2 {
-        font-size: 22px;
-        margin-bottom: var(--spacing-md);
-    }
-    
-    .pricing-features li::before {
-        margin-right: var(--spacing-xs);
-    }
-}
-
-/* Для мобильных устройств */
-@media (max-width: 768px) {
-    .container {
-        padding: 0 var(--spacing-sm);
-    }
-    
-    .burger {
-        display: block;
-    }
-    
-    .nav-menu {
-        display: none;
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        max-height: 100vh;
-        overflow-y: auto;
-        background: var(--background-color);
-        padding: var(--spacing-xl) var(--spacing-md);
-        box-shadow: var(--shadow-md);
-        z-index: 100;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        gap: var(--spacing-lg);
-    }
-    
-    .nav-menu.active {
-        display: flex;
-    }
-    
-    .nav-link {
-        font-size: 18px;
-        padding: var(--spacing-sm) var(--spacing-md);
-        width: 100%;
-        text-align: center;
+    .logo {
+        font-size: 20px;
     }
     
     .login-btn {
-        display: none;
+        padding: 8px 16px;
+        font-size: 14px;
     }
     
-    .promo-section {
-        margin: var(--spacing-lg) 0;
-        padding: var(--spacing-lg) var(--spacing-sm);
+    .button, .upload-btn, #upload-button, .pricing-btn {
+        padding: 12px 20px;
+        font-size: 14px;
+        width: 100%;
     }
     
     .upload-area {
-        padding: var(--spacing-md);
-        min-height: 140px;
+        padding: 20px;
+        min-height: 120px;
     }
     
     .upload-area::before {
-        font-size: 28px;
-    }
-    
-    .upload-area::after {
-        font-size: 11px;
-        margin-top: var(--spacing-sm);
+        font-size: 24px;
     }
     
     .upload-area p {
@@ -1061,107 +1027,41 @@ h1 {
     }
     
     .file-format-info {
-        max-width: 100%;
+        font-size: 12px;
     }
     
-    .use-cases {
-        margin: var(--spacing-lg) 0;
-        padding: var(--spacing-lg) var(--spacing-sm);
-    }
-    
-    .use-cases-grid {
-        gap: var(--spacing-md);
-    }
-    
-    .use-case-card {
-        padding: var(--spacing-md);
-    }
-    
-    .upload-container {
-        flex-direction: column;
-        align-items: stretch;
+    .file-type-tag {
+        font-size: 12px;
+        padding: 3px 6px;
     }
     
     .modal-content {
-        padding: var(--spacing-md);
-        margin: var(--spacing-sm);
-        width: calc(100% - var(--spacing-sm) * 2);
-        max-height: 85vh;
+        padding: 20px;
+        width: 95%;
     }
     
-    .pricing-grid {
-        grid-template-columns: 1fr;
+    .modal h2 {
+        font-size: 20px;
+        margin-bottom: 20px;
     }
     
-    .footer-grid {
-        grid-template-columns: 1fr;
-        gap: var(--spacing-lg);
+    .pricing-header h3 {
+        font-size: 18px;
     }
     
-    .footer-info {
-        text-align: center;
+    .price {
+        font-size: 28px;
     }
-    
-    .footer-links {
-        text-align: center;
-    }
-}
 
-/* Для планшетов */
-@media (min-width: 769px) and (max-width: 1024px) {
-    .promo-grid, .steps, .result-grid, .use-cases-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
-}
-
-/* Для планшетов (промежуточный размер футера) */
-@media (max-width: 992px) and (min-width: 769px) {
-    .footer-grid {
-        grid-template-columns: 1fr 1fr;
-    }
-    
-    .footer-info {
-        grid-column: span 2;
-    }
-}
-
-/* Темный режим */
-@media (prefers-color-scheme: dark) {
-    :root {
-        --text-color: #fff;
-        --secondary-color: #a0a0a0;
-        --border-color: #333;
-        --background-color: #1a1a1a;
-        --card-bg: #2a2a2a;
-        --card-bg-hover: #333;
-        --text-color-dark: #fff;
-        --text-primary: #fff;
-        --text-secondary: #a0a0a0;
-    }
-    
-    .header {
-        background: rgba(26, 26, 26, 0.95);
-        border-color: #333;
-    }
-    
-    .nav-link:hover {
-        background: rgba(255, 90, 95, 0.2);
-    }
-    
     .promo-section, .use-cases {
-        background: #222;
+        padding: var(--spacing-md) 0;
     }
     
-    .pricing-features li {
-        border-color: #333;
+    .footer h3 {
+        font-size: 20px;
     }
     
-    .pricing-card {
-        border-color: #333;
-    }
-    
-    .footer {
-        background: #1a1a1a;
-        border-color: #333;
+    .footer-links h4 {
+        font-size: 16px;
     }
 }

@@ -7,7 +7,7 @@
     <title>RFM Pro - Анализ клиентской базы</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -21,7 +21,7 @@
                     <a href="#how-it-works" class="nav-link">Как это работает</a>
                     <a href="#use-cases" class="nav-link">Применение</a>
                     <a href="#results" class="nav-link">Результаты</a>
-                    <a href="#" id="pricing-trigger" class="nav-link">Тарифы</a>
+                    <a href="#" id="pricing-trigger" class="nav-link" onclick="openPricingModal(); return false;">Тарифы</a>
                 </div>
             </div>
             <button class="login-btn" onclick="alert('Вход в разработке')">Войти</button>
@@ -97,7 +97,7 @@
         <div class="container">
             <section class="hero">
                 <h1>Узнайте своих клиентов лучше</h1>
-                <p class="subtitle">Загрузите данные о покупках и получите RFM-анализ</p>
+                <p class="subtitle">Загрузите данные о покупках и получите RFM-анализ для роста вашего бизнеса</p>
             </section>
             
             <!-- Секция загрузки данных -->
@@ -132,8 +132,8 @@
                 </div>
             </section>
 
-            <section class="promo-section" aria-labelledby="benefits-title">
-                <h2 id="benefits-title" class="visually-hidden">Преимущества RFM-анализа</h2>
+            <section id="benefits" class="promo-section" aria-labelledby="benefits-title">
+                <h2 id="benefits-title">Преимущества RFM-анализа</h2>
                 <div class="promo-grid">
                     <article class="promo-card">
                         <div class="promo-icon" aria-hidden="true">🎯</div>
@@ -153,7 +153,7 @@
                 </div>
             </section>
 
-            <section class="how-it-works" aria-labelledby="how-it-works-title">
+            <section id="how-it-works" class="how-it-works" aria-labelledby="how-it-works-title">
                 <h2 id="how-it-works-title">Как это работает?</h2>
                 <div class="steps">
                     <article class="step">
@@ -174,7 +174,7 @@
                 </div>
             </section>
 
-            <section class="use-cases" aria-labelledby="use-cases-title">
+            <section id="use-cases" class="use-cases" aria-labelledby="use-cases-title">
                 <h2 id="use-cases-title">Где применяется RFM-анализ?</h2>
                 <div class="use-cases-grid">
                     <article class="use-case-card">
@@ -220,12 +220,7 @@
                 </div>
             </section>
 
-            <section class="results-section" id="resultsSection" aria-labelledby="results-title">
-                <h2 id="results-title" class="visually-hidden">Результаты анализа</h2>
-                <!-- Результаты будут добавлены динамически -->
-            </section>
-
-            <section class="result-section" aria-labelledby="result-title">
+            <section id="results" class="result-section" aria-labelledby="result-title">
                 <h2 id="result-title">Что вы получите?</h2>
                 <div class="result-grid">
                     <article class="result-item">
@@ -289,5 +284,58 @@
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
     <script src="supabase-keys.js"></script>
     <script src="app.js"></script>
+    <script>
+        // Функции для работы с модальным окном
+        function openPricingModal() {
+          console.log("Открытие окна тарифов");
+          document.getElementById('pricing-modal').classList.add('active');
+          document.body.style.overflow = 'hidden';
+        }
+        
+        function closePricingModal() {
+          console.log("Закрытие окна тарифов");
+          document.getElementById('pricing-modal').classList.remove('active');
+          document.body.style.overflow = '';
+        }
+        
+        // Добавление обработчиков событий при загрузке страницы
+        document.addEventListener('DOMContentLoaded', function() {
+          console.log("Инициализация модального окна тарифов");
+          
+          // Получаем элементы
+          const pricingModal = document.getElementById('pricing-modal');
+          const pricingClose = document.getElementById('pricing-close');
+          
+          if (!pricingModal || !pricingClose) {
+            console.error("Не найдены элементы модального окна:", {
+              modal: pricingModal,
+              closeButton: pricingClose
+            });
+            return;
+          }
+          
+          // Закрытие при клике на кнопку
+          pricingClose.addEventListener('click', function(e) {
+            e.preventDefault();
+            closePricingModal();
+          });
+          
+          // Закрытие при клике вне окна
+          pricingModal.addEventListener('click', function(e) {
+            if (e.target === pricingModal) {
+              closePricingModal();
+            }
+          });
+          
+          // Закрытие по Esc
+          document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && pricingModal.classList.contains('active')) {
+              closePricingModal();
+            }
+          });
+          
+          console.log("Обработчики для модального окна установлены");
+        });
+      </script>
 </body>
-</html> 
+</html>
