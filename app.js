@@ -3,8 +3,6 @@
 // <script src="app.js"></script>
 
 document.addEventListener('DOMContentLoaded', () => {
-    console.log("DOM полностью загружен и готов к инициализации");
-    
     // Инициализация Supabase клиента
     const supabase = window.Supabase.createClient(
         window.supabaseConfig.url,
@@ -17,16 +15,11 @@ document.addEventListener('DOMContentLoaded', () => {
     // Бургер-меню
     const burger = document.querySelector('.burger');
     const navMenu = document.querySelector('.nav-menu');
-    
     if (burger && navMenu) {
-        console.log("Инициализация бургер-меню");
-        
         burger.addEventListener('click', () => {
             navMenu.classList.toggle('active');
-            const isExpanded = navMenu.classList.contains('active');
-            burger.textContent = isExpanded ? '×' : '☰';
-            burger.setAttribute('aria-expanded', isExpanded ? 'true' : 'false');
-            document.body.style.overflow = isExpanded ? 'hidden' : '';
+            burger.textContent = navMenu.classList.contains('active') ? '×' : '☰';
+            document.body.style.overflow = navMenu.classList.contains('active') ? 'hidden' : '';
         });
 
         // Закрываем меню при клике на ссылку
@@ -34,30 +27,62 @@ document.addEventListener('DOMContentLoaded', () => {
             link.addEventListener('click', () => {
                 navMenu.classList.remove('active');
                 burger.textContent = '☰';
-                burger.setAttribute('aria-expanded', 'false');
                 document.body.style.overflow = '';
             });
         });
-        
-        // Добавляем обработку клавиши Escape для меню
+    }
+
+    // Pricing Modal
+    const pricingTrigger = document.getElementById('pricing-trigger');
+    const pricingModal = document.getElementById('pricing-modal');
+    const pricingClose = document.getElementById('pricing-close');
+
+    function openPricingModal() {
+        pricingModal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closePricingModal() {
+        pricingModal.classList.remove('active');
+        document.body.style.overflow = '';
+    }
+
+    if (pricingTrigger && pricingModal && pricingClose) {
+        pricingTrigger.addEventListener('click', (e) => {
+            e.preventDefault();
+            openPricingModal();
+        });
+
+        pricingClose.addEventListener('click', closePricingModal);
+
+        pricingModal.addEventListener('click', (e) => {
+            if (e.target === pricingModal) {
+                closePricingModal();
+            }
+        });
+
         document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape' && navMenu.classList.contains('active')) {
-                navMenu.classList.remove('active');
-                burger.textContent = '☰';
-                burger.setAttribute('aria-expanded', 'false');
-                document.body.style.overflow = '';
+            if (e.key === 'Escape' && pricingModal.classList.contains('active')) {
+                closePricingModal();
             }
         });
     }
 
-    // Drag-and-drop и загрузка CSV
+    // Drag-and-drop и загрузка файлов
     const dropZone = document.getElementById('dropZone');
     const fileInput = document.getElementById('csv-file');
     const uploadButton = document.getElementById('upload-button');
+    const processButton = document.getElementById('process-button');
+    const columnMapping = document.getElementById('column-mapping');
+    const clientIdSelect = document.getElementById('client-id-column');
+    const dateSelect = document.getElementById('date-column');
+    const amountSelect = document.getElementById('amount-column');
+
+    // Переменные для хранения данных из файла
+    let fileData = null;
+    let fileHeaders = [];
 
     if (dropZone && fileInput && uploadButton) {
-        console.log("Инициализация области drag-and-drop");
-        
         // Предотвращаем стандартное поведение браузера
         ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
             dropZone.addEventListener(eventName, preventDefaults, false);
@@ -79,25 +104,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
         function highlight(e) {
             dropZone.classList.add('dragover');
-            // Добавляем текст обратной связи
-            const text = dropZone.querySelector('p');
-            if (text) {
-                text.textContent = 'Отпустите файл для загрузки';
-                text.style.color = 'var(--primary-color)';
-            }
         }
 
         function unhighlight(e) {
             dropZone.classList.remove('dragover');
-            resetDropzoneText();
-        }
-
-        function resetDropzoneText() {
-            const text = dropZone.querySelector('p');
-            if (text) {
-                text.textContent = 'Перетащите CSV файл или нажмите для выбора';
-                text.style.color = '';
-            }
         }
 
         // Обработка перетаскивания файла
@@ -116,192 +126,296 @@ document.addEventListener('DOMContentLoaded', () => {
             handleFile(file);
         });
 
-        function handleFile(file) {
+        function isValidFileType(file) {
+            const allowedTypes = ['text/csv', 'application/vnd.ms-excel', 
+                                 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'];
+            return allowedTypes.includes(file.type) || 
+                  file.name.endsWith('.csv') || 
+                  file.name.endsWith('.xlsx') || 
+                  file.name.endsWith('.xls');
+        }
+
+        async function handleFile(file) {
             if (!file) return;
             
-            // Проверяем тип файла
-            if (file.type !== 'text/csv' && !file.name.endsWith('.csv')) {
-                showErrorMessage('Пожалуйста, загрузите файл в формате CSV');
-                resetDropzoneText();
-                return;
-            }
-            
-            // Проверяем размер файла (максимум 10 МБ)
-            if (file.size > 10 * 1024 * 1024) {
-                showErrorMessage('Файл слишком большой. Максимальный размер: 10 МБ');
-                resetDropzoneText();
+            if (!isValidFileType(file)) {
+                alert('Пожалуйста, загрузите CSV или Excel файл');
                 return;
             }
 
-            // Показываем имя выбранного файла
-            const text = dropZone.querySelector('p');
-            if (text) {
-                text.innerHTML = `<strong>${file.name}</strong> (${formatFileSize(file.size)})`;
-                text.style.color = 'var(--text-color)';
-            }
+            // Показываем имя файла
+            dropZone.querySelector('p').textContent = file.name;
             
-            // Добавляем класс для стилизации
-            document.body.classList.add('file-selected');
-            
-            // Меняем текст кнопки
-            uploadButton.textContent = 'Загрузить выбранный файл';
-        }
-
-        // Функция для форматирования размера файла
-        function formatFileSize(bytes) {
-            if (bytes === 0) return '0 Байт';
-            const k = 1024;
-            const sizes = ['Байт', 'КБ', 'МБ', 'ГБ'];
-            const i = Math.floor(Math.log(bytes) / Math.log(k));
-            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
-        }
-
-        // Функция для отображения ошибки
-        function showErrorMessage(message) {
-            console.error("Ошибка:", message);
-            
-            // Создаем элемент для сообщения об ошибке
-            const errorElement = document.createElement('div');
-            errorElement.className = 'error-message';
-            errorElement.textContent = message;
-            errorElement.style.cssText = `
-                background: #ff5a5f;
-                color: white;
-                padding: 10px 15px;
-                border-radius: 4px;
-                position: fixed;
-                top: 20px;
-                right: 20px;
-                z-index: 1000;
-                box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-                animation: slideIn 0.3s forwards;
-            `;
-            
-            // Добавляем стили анимации, если они еще не добавлены
-            if (!document.getElementById('error-animation-style')) {
-                const style = document.createElement('style');
-                style.id = 'error-animation-style';
-                style.textContent = `
-                    @keyframes slideIn {
-                        from { transform: translateX(100%); opacity: 0; }
-                        to { transform: translateX(0); opacity: 1; }
-                    }
-                    @keyframes slideOut {
-                        from { transform: translateX(0); opacity: 1; }
-                        to { transform: translateX(100%); opacity: 0; }
-                    }
-                `;
-                document.head.appendChild(style);
-            }
-            
-            // Добавляем сообщение на страницу
-            document.body.appendChild(errorElement);
-            
-            // Автоматически скрываем сообщение через 5 секунд
-            setTimeout(() => {
-                errorElement.style.animation = 'slideOut 0.3s forwards';
-                setTimeout(() => {
-                    errorElement.remove();
-                }, 300);
-            }, 5000);
-        }
-
-        // Функция для отображения успешного сообщения
-        function showSuccessMessage(message) {
-            console.log("Успех:", message);
-            
-            const successElement = document.createElement('div');
-            successElement.className = 'success-message';
-            successElement.textContent = message;
-            successElement.style.cssText = `
-                background: #27ae60;
-                color: white;
-                padding: 10px 15px;
-                border-radius: 4px;
-                position: fixed;
-                top: 20px;
-                right: 20px;
-                z-index: 1000;
-                box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-                animation: slideIn 0.3s forwards;
-            `;
-            
-            document.body.appendChild(successElement);
-            
-            setTimeout(() => {
-                successElement.style.animation = 'slideOut 0.3s forwards';
-                setTimeout(() => {
-                    successElement.remove();
-                }, 300);
-            }, 5000);
-        }
-
-        // Загрузка файла
-        uploadButton.addEventListener('click', async () => {
-            const file = fileInput.files[0];
-            if (!file) {
-                showErrorMessage('Пожалуйста, выберите файл');
-                return;
-            }
-
             try {
-                console.log("Начинаем загрузку файла:", file.name);
-                
-                // Добавляем класс для отображения прогресса загрузки
-                uploadButton.classList.add('uploading');
-                uploadButton.textContent = 'Загрузка...';
-                
-                const text = await file.text();
-                const rows = text.split('\n').map(row => row.split(','));
-                
-                // Проверяем, соответствует ли структура ожидаемой
-                if (rows.length < 2) {
-                    throw new Error('Файл не содержит данных');
+                // Определяем тип файла и парсим его
+                if (file.name.endsWith('.csv')) {
+                    await parseCSV(file);
+                } else if (file.name.endsWith('.xlsx') || file.name.endsWith('.xls')) {
+                    await parseExcel(file);
                 }
                 
-                console.log("Обработка данных файла...");
+                // Активируем выбор столбцов
+                columnMapping.classList.remove('hidden');
+                processButton.classList.remove('hidden');
+                uploadButton.classList.add('hidden');
                 
-                // Пропускаем заголовок
-                const data = rows.slice(1).map(row => {
-                    if (row.length < 3) {
-                        throw new Error('Неверный формат данных');
-                    }
-                    return {
-                        client_id: row[0],
-                        date: row[1],
-                        amount: parseFloat(row[2])
-                    };
-                });
+            } catch (error) {
+                console.error('Ошибка при чтении файла:', error);
+                alert('Не удалось прочитать файл. Проверьте формат и попробуйте снова.');
+            }
+        }
 
-                console.log("Сохранение данных в Supabase...");
+        async function parseCSV(file) {
+            const text = await file.text();
+            
+            // Используем простой парсер CSV
+            const rows = text.split('\n').map(row => {
+                // Поддержка как для запятых, так и для точек с запятой
+                let separator = row.includes(';') ? ';' : ',';
+                return row.split(separator).map(cell => cell.trim());
+            });
+            
+            if (rows.length < 2) {
+                throw new Error('Файл не содержит достаточно данных');
+            }
+            
+            fileHeaders = rows[0];
+            fileData = rows.slice(1).filter(row => row.length === fileHeaders.length);
+            
+            // Заполняем выпадающие списки
+            populateColumnSelects(fileHeaders);
+        }
+
+        async function parseExcel(file) {
+            // Используем SheetJS для работы с Excel
+            // При необходимости добавьте <script src="https://unpkg.com/xlsx/dist/xlsx.full.min.js"></script> в index.html
+            if (!window.XLSX) {
+                throw new Error('Библиотека XLSX не найдена. Проверьте подключение библиотеки в HTML.');
+            }
+            
+            const arrayBuffer = await file.arrayBuffer();
+            const workbook = window.XLSX.read(arrayBuffer, { type: 'array' });
+            
+            // Берем первый лист
+            const firstSheetName = workbook.SheetNames[0];
+            const worksheet = workbook.Sheets[firstSheetName];
+            
+            // Преобразуем в массив
+            const data = window.XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+            
+            if (data.length < 2) {
+                throw new Error('Файл не содержит достаточно данных');
+            }
+            
+            fileHeaders = data[0];
+            fileData = data.slice(1).filter(row => row.length === fileHeaders.length);
+            
+            // Заполняем выпадающие списки
+            populateColumnSelects(fileHeaders);
+        }
+
+        function populateColumnSelects(headers) {
+            // Очищаем списки
+            [clientIdSelect, dateSelect, amountSelect].forEach(select => {
+                select.innerHTML = '';
+                // Добавляем пустой вариант
+                const emptyOption = document.createElement('option');
+                emptyOption.value = '';
+                emptyOption.textContent = '-- Выберите столбец --';
+                select.appendChild(emptyOption);
+            });
+            
+            // Заполняем варианты
+            headers.forEach((header, index) => {
+                [clientIdSelect, dateSelect, amountSelect].forEach(select => {
+                    const option = document.createElement('option');
+                    option.value = index;
+                    option.textContent = header;
+                    select.appendChild(option);
+                });
+            });
+            
+            // Пытаемся определить подходящие столбцы автоматически
+            autoDetectColumns(headers);
+        }
+
+        function autoDetectColumns(headers) {
+            // Поиск по ключевым словам
+            headers.forEach((header, index) => {
+                const lowerHeader = header.toLowerCase();
+                
+                // ID клиента
+                if (lowerHeader.includes('client') || lowerHeader.includes('клиент') || 
+                    lowerHeader.includes('id') || lowerHeader.includes('customer')) {
+                    clientIdSelect.value = index;
+                }
+                
+                // Дата
+                if (lowerHeader.includes('date') || lowerHeader.includes('дата') || 
+                    lowerHeader.includes('time') || lowerHeader.includes('время')) {
+                    dateSelect.value = index;
+                }
+                
+                // Сумма
+                if (lowerHeader.includes('amount') || lowerHeader.includes('сумма') || 
+                    lowerHeader.includes('price') || lowerHeader.includes('стоимость') || 
+                    lowerHeader.includes('total') || lowerHeader.includes('итого')) {
+                    amountSelect.value = index;
+                }
+            });
+        }
+
+        // Обработка кнопки "Обработать данные"
+        if (processButton) {
+            processButton.addEventListener('click', processFileData);
+        }
+
+        async function processFileData() {
+            // Получаем индексы выбранных столбцов
+            const clientIdIdx = parseInt(clientIdSelect.value);
+            const dateIdx = parseInt(dateSelect.value);
+            const amountIdx = parseInt(amountSelect.value);
+            
+            // Проверяем, что все столбцы выбраны
+            if (isNaN(clientIdIdx) || isNaN(dateIdx) || isNaN(amountIdx)) {
+                alert('Пожалуйста, выберите все необходимые столбцы');
+                return;
+            }
+            
+            try {
+                // Преобразуем данные в нужный формат
+                const processedData = fileData.map(row => {
+                    // Проверяем, что все нужные ячейки существуют
+                    if (row[clientIdIdx] === undefined || row[dateIdx] === undefined || row[amountIdx] === undefined) {
+                        return null; // Пропускаем строки с отсутствующими данными
+                    }
+                    
+                    // Пытаемся преобразовать сумму в число
+                    let amount = row[amountIdx];
+                    if (typeof amount === 'string') {
+                        // Заменяем запятую на точку, если это строка
+                        amount = amount.replace(',', '.');
+                        // Удаляем все нечисловые символы (кроме точки)
+                        amount = amount.replace(/[^\d.-]/g, '');
+                    }
+                    
+                    const parsedAmount = parseFloat(amount);
+                    
+                    // Если сумма не является числом, пропускаем строку
+                    if (isNaN(parsedAmount)) {
+                        return null;
+                    }
+                    
+                    // Обрабатываем дату
+                    let purchaseDate = row[dateIdx];
+                    if (typeof purchaseDate === 'string') {
+                        // Пытаемся разобрать различные форматы даты
+                        const dateObj = parseDateString(purchaseDate);
+                        if (dateObj) {
+                            purchaseDate = dateObj.toISOString().split('T')[0]; // формат YYYY-MM-DD
+                        } else {
+                            return null; // Если дата некорректная, пропускаем строку
+                        }
+                    } else if (purchaseDate instanceof Date) {
+                        // Если это объект Date (из Excel)
+                        purchaseDate = purchaseDate.toISOString().split('T')[0];
+                    }
+                    
+                    return {
+                        client_id: row[clientIdIdx].toString(),
+                        date: purchaseDate,
+                        amount: parsedAmount
+                    };
+                }).filter(item => item !== null); // Исключаем пропущенные строки
+                
+                if (processedData.length === 0) {
+                    alert('Не удалось обработать данные. Проверьте формат и выбранные столбцы.');
+                    return;
+                }
                 
                 // Сохраняем данные в Supabase
                 const { error } = await supabase
                     .from('purchases')
-                    .insert(data.map(item => ({
+                    .insert(processedData.map(item => ({
                         ...item,
                         user_id: tempUserId
                     })));
-
+                
                 if (error) throw error;
                 
-                console.log("Данные успешно загружены");
+                alert(`Данные успешно загружены! Обработано ${processedData.length} записей.`);
                 
-                // Успешная загрузка
-                showSuccessMessage('Данные успешно загружены');
-                resetDropzoneText();
-                fileInput.value = '';
+                // Сбрасываем интерфейс
+                resetUploadInterface();
+                
+                // Опционально - автоматически запускаем анализ
+                if (document.getElementById('analyze-button')) {
+                    document.getElementById('analyze-button').click();
+                }
                 
             } catch (error) {
-                console.error('Ошибка загрузки:', error);
-                showErrorMessage('Ошибка при загрузке файла: ' + error.message);
-            } finally {
-                // Убираем класс загрузки и возвращаем исходный текст кнопки
-                uploadButton.classList.remove('uploading');
-                uploadButton.textContent = 'Загрузить CSV';
-                document.body.classList.remove('file-selected');
+                console.error('Ошибка при обработке данных:', error);
+                alert('Произошла ошибка при обработке данных: ' + error.message);
             }
-        });
+        }
+
+        function resetUploadInterface() {
+            // Сбрасываем интерфейс
+            dropZone.querySelector('p').textContent = 'Перетащите CSV или Excel файл сюда или кликните для выбора';
+            columnMapping.classList.add('hidden');
+            processButton.classList.add('hidden');
+            uploadButton.classList.remove('hidden');
+            fileInput.value = '';
+            fileData = null;
+            fileHeaders = [];
+        }
+
+        function parseDateString(dateStr) {
+            // Функция для попытки разбора различных форматов дат
+            // Типичные форматы: DD.MM.YYYY, MM/DD/YYYY, YYYY-MM-DD
+            
+            // Убираем лишние пробелы
+            dateStr = dateStr.trim();
+            
+            // Пробуем напрямую через Date.parse
+            let date = new Date(dateStr);
+            if (!isNaN(date.getTime())) {
+                return date;
+            }
+            
+            // Проверяем популярные форматы
+            let day, month, year;
+            
+            // DD.MM.YYYY или DD,MM,YYYY (европейский формат)
+            const euroFormat = dateStr.match(/(\d{1,2})[.,](\d{1,2})[.,](\d{4})/);
+            if (euroFormat) {
+                day = parseInt(euroFormat[1], 10);
+                month = parseInt(euroFormat[2], 10) - 1; // Месяцы от 0 до 11
+                year = parseInt(euroFormat[3], 10);
+                return new Date(year, month, day);
+            }
+            
+            // MM/DD/YYYY (американский формат)
+            const usFormat = dateStr.match(/(\d{1,2})\/(\d{1,2})\/(\d{4})/);
+            if (usFormat) {
+                month = parseInt(usFormat[1], 10) - 1;
+                day = parseInt(usFormat[2], 10);
+                year = parseInt(usFormat[3], 10);
+                return new Date(year, month, day);
+            }
+            
+            // YYYY-MM-DD (ISO формат)
+            const isoFormat = dateStr.match(/(\d{4})-(\d{1,2})-(\d{1,2})/);
+            if (isoFormat) {
+                year = parseInt(isoFormat[1], 10);
+                month = parseInt(isoFormat[2], 10) - 1;
+                day = parseInt(isoFormat[3], 10);
+                return new Date(year, month, day);
+            }
+            
+            // Если ничего не подошло, возвращаем null
+            return null;
+        }
     }
 
     // RFM анализ
@@ -309,15 +423,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const resultsContainer = document.getElementById('results-container');
 
     if (analyzeButton && resultsContainer) {
-        console.log("Инициализация RFM-анализа");
-        
         analyzeButton.addEventListener('click', async () => {
-            console.log("Запуск RFM-анализа");
-            
             try {
-                // Показываем индикатор загрузки или меняем текст кнопки
-                analyzeButton.textContent = 'Анализируем...';
+                // Показываем индикатор загрузки
                 analyzeButton.disabled = true;
+                analyzeButton.innerHTML = '<span class="processing-indicator"></span> Анализ...';
                 
                 // Получаем данные из Supabase
                 const { data, error } = await supabase
@@ -328,11 +438,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (error) throw error;
                 
                 if (!data || data.length === 0) {
-                    showErrorMessage('Нет данных для анализа. Загрузите файл с данными.');
-                    return;
+                    throw new Error('Нет данных для анализа. Загрузите файл с данными о покупках.');
                 }
-                
-                console.log("Данные получены, выполняем RFM-анализ");
 
                 // Группируем по клиентам
                 const clients = {};
@@ -353,37 +460,143 @@ document.addEventListener('DOMContentLoaded', () => {
                     const lastPurchase = new Date(Math.max(...data.purchases.map(p => new Date(p.date))));
                     const daysSinceLastPurchase = Math.floor((now - lastPurchase) / (1000 * 60 * 60 * 24));
                     
+                    // Рассчитываем RFM оценки от 1 до 5
+                    // Recency: меньше дней = выше оценка
+                    let recencyScore;
+                    if (daysSinceLastPurchase <= 30) recencyScore = 5;
+                    else if (daysSinceLastPurchase <= 60) recencyScore = 4;
+                    else if (daysSinceLastPurchase <= 90) recencyScore = 3;
+                    else if (daysSinceLastPurchase <= 180) recencyScore = 2;
+                    else recencyScore = 1;
+                    
+                    // Frequency: больше покупок = выше оценка
+                    const frequency = data.purchases.length;
+                    let frequencyScore;
+                    if (frequency >= 10) frequencyScore = 5;
+                    else if (frequency >= 5) frequencyScore = 4;
+                    else if (frequency >= 3) frequencyScore = 3;
+                    else if (frequency >= 2) frequencyScore = 2;
+                    else frequencyScore = 1;
+                    
+                    // Monetary: больше денег = выше оценка
+                    const monetary = data.total;
+                    
                     return {
                         clientId,
                         recency: daysSinceLastPurchase,
-                        frequency: data.purchases.length,
-                        monetary: data.total
+                        frequency,
+                        monetary,
+                        recencyScore,
+                        frequencyScore
                     };
                 });
-
-                console.log("Результаты анализа:", results);
+                
+                // Сортируем по сумме покупок для определения monetary score
+                results.sort((a, b) => b.monetary - a.monetary);
+                
+                // Распределяем monetary score на основе квинтилей
+                const resultsCount = results.length;
+                const quintileSize = Math.ceil(resultsCount / 5);
+                
+                for (let i = 0; i < resultsCount; i++) {
+                    if (i < quintileSize) results[i].monetaryScore = 5;
+                    else if (i < quintileSize * 2) results[i].monetaryScore = 4;
+                    else if (i < quintileSize * 3) results[i].monetaryScore = 3;
+                    else if (i < quintileSize * 4) results[i].monetaryScore = 2;
+                    else results[i].monetaryScore = 1;
+                }
+                
+                // Вычисляем RFM-сегмент для каждого клиента
+                results.forEach(result => {
+                    const rfmScore = `${result.recencyScore}${result.frequencyScore}${result.monetaryScore}`;
+                    
+                    // Определяем сегмент
+                    if (rfmScore.startsWith('555') || rfmScore.startsWith('554') || rfmScore.startsWith('544')) {
+                        result.segment = 'VIP клиенты';
+                        result.segmentClass = 'segment-vip';
+                    } else if (rfmScore.startsWith('5') || (result.recencyScore >= 4 && result.frequencyScore >= 3)) {
+                        result.segment = 'Активные клиенты';
+                        result.segmentClass = 'segment-active';
+                    } else if (result.recencyScore <= 2 && result.frequencyScore >= 3 && result.monetaryScore >= 3) {
+                        result.segment = 'Уходящие ценные клиенты';
+                        result.segmentClass = 'segment-leaving';
+                    } else if (result.recencyScore <= 2 && result.frequencyScore <= 2 && result.monetaryScore >= 3) {
+                        result.segment = 'Спящие ценные клиенты';
+                        result.segmentClass = 'segment-sleep';
+                    } else if (result.recencyScore >= 3 && result.frequencyScore <= 2 && result.monetaryScore <= 2) {
+                        result.segment = 'Новые клиенты';
+                        result.segmentClass = 'segment-new';
+                    } else if (result.recencyScore <= 2 && result.frequencyScore <= 2 && result.monetaryScore <= 2) {
+                        result.segment = 'Потерянные клиенты';
+                        result.segmentClass = 'segment-lost';
+                    } else {
+                        result.segment = 'Стандартные клиенты';
+                        result.segmentClass = 'segment-standard';
+                    }
+                });
 
                 // Отображаем результаты
-                resultsContainer.innerHTML = results.length > 0 ? 
-                    results.map(result => `
-                        <div class="result-card">
-                            <h3>Клиент ${result.clientId}</h3>
-                            <p>Recency: ${result.recency} дней</p>
-                            <p>Frequency: ${result.frequency} покупок</p>
-                            <p>Monetary: ${result.monetary.toFixed(2)} ₽</p>
+                resultsContainer.innerHTML = results.map(result => `
+                    <div class="result-card ${result.segmentClass}">
+                        <h3>Клиент ${result.clientId}</h3>
+                        <div class="segment-badge">${result.segment}</div>
+                        <div class="metrics-grid">
+                            <div class="metric">
+                                <div class="metric-value">${result.recencyScore}</div>
+                                <div class="metric-label">Recency</div>
+                                <div class="metric-detail">${result.recency} дней</div>
+                            </div>
+                            <div class="metric">
+                                <div class="metric-value">${result.frequencyScore}</div>
+                                <div class="metric-label">Frequency</div>
+                                <div class="metric-detail">${result.frequency} покупок</div>
+                            </div>
+                            <div class="metric">
+                                <div class="metric-value">${result.monetaryScore}</div>
+                                <div class="metric-label">Monetary</div>
+                                <div class="metric-detail">${result.monetary.toLocaleString('ru-RU')} ₽</div>
+                            </div>
                         </div>
-                    `).join('') : 
-                    '<div class="no-results">Нет данных для анализа</div>';
+                    </div>
+                `).join('');
                 
-                showSuccessMessage('Анализ успешно выполнен');
+                // Добавляем сводную информацию
+                const segmentCounts = {};
+                results.forEach(result => {
+                    if (!segmentCounts[result.segment]) {
+                        segmentCounts[result.segment] = 0;
+                    }
+                    segmentCounts[result.segment]++;
+                });
+                
+                const summaryHtml = `
+                    <div class="summary-card">
+                        <h3>Сводная информация</h3>
+                        <p>Всего клиентов: ${results.length}</p>
+                        <div class="segments-summary">
+                            ${Object.entries(segmentCounts).map(([segment, count]) => `
+                                <div class="segment-item">
+                                    <div class="segment-name">${segment}:</div>
+                                    <div class="segment-count">${count} (${Math.round(count / results.length * 100)}%)</div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+                
+                resultsContainer.insertAdjacentHTML('afterbegin', summaryHtml);
+                
+                // Восстанавливаем кнопку
+                analyzeButton.disabled = false;
+                analyzeButton.textContent = 'Запустить анализ';
                 
             } catch (error) {
                 console.error('Ошибка анализа:', error);
-                showErrorMessage('Ошибка при анализе данных: ' + error.message);
-            } finally {
-                // Возвращаем кнопку в исходное состояние
-                analyzeButton.textContent = 'Запустить анализ';
+                alert('Ошибка при анализе данных: ' + error.message);
+                
+                // Восстанавливаем кнопку
                 analyzeButton.disabled = false;
+                analyzeButton.textContent = 'Запустить анализ';
             }
         });
     }
@@ -394,83 +607,4 @@ document.addEventListener('DOMContentLoaded', () => {
     // 3. Реализовать реальную аутентификацию вместо tempUserId
     // 4. Добавить валидацию входных данных
     // 5. Настроить CORS и другие настройки безопасности в Supabase
-    
-    console.log("Инициализация приложения завершена");
 });
-
-// Функция для отображения сообщений об ошибках (может использоваться в любом месте)
-function showErrorMessage(message) {
-    console.error("Ошибка:", message);
-    
-    const errorElement = document.createElement('div');
-    errorElement.className = 'error-message';
-    errorElement.textContent = message;
-    errorElement.style.cssText = `
-        background: #ff5a5f;
-        color: white;
-        padding: 10px 15px;
-        border-radius: 4px;
-        position: fixed;
-        top: 20px;
-        right: 20px;
-        z-index: 1000;
-        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-        animation: slideIn 0.3s forwards;
-    `;
-    
-    // Добавляем стили анимации, если они еще не добавлены
-    if (!document.getElementById('error-animation-style')) {
-        const style = document.createElement('style');
-        style.id = 'error-animation-style';
-        style.textContent = `
-            @keyframes slideIn {
-                from { transform: translateX(100%); opacity: 0; }
-                to { transform: translateX(0); opacity: 1; }
-            }
-            @keyframes slideOut {
-                from { transform: translateX(0); opacity: 1; }
-                to { transform: translateX(100%); opacity: 0; }
-            }
-        `;
-        document.head.appendChild(style);
-    }
-    
-    document.body.appendChild(errorElement);
-    
-    setTimeout(() => {
-        errorElement.style.animation = 'slideOut 0.3s forwards';
-        setTimeout(() => {
-            errorElement.remove();
-        }, 300);
-    }, 5000);
-}
-
-// Функция для отображения сообщений об успехе
-function showSuccessMessage(message) {
-    console.log("Успех:", message);
-    
-    const successElement = document.createElement('div');
-    successElement.className = 'success-message';
-    successElement.textContent = message;
-    successElement.style.cssText = `
-        background: #27ae60;
-        color: white;
-        padding: 10px 15px;
-        border-radius: 4px;
-        position: fixed;
-        top: 20px;
-        right: 20px;
-        z-index: 1000;
-        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-        animation: slideIn 0.3s forwards;
-    `;
-    
-    document.body.appendChild(successElement);
-    
-    setTimeout(() => {
-        successElement.style.animation = 'slideOut 0.3s forwards';
-        setTimeout(() => {
-            successElement.remove();
-        }, 300);
-    }, 5000);
-}

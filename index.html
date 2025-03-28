@@ -101,25 +101,43 @@
             </section>
             
             <!-- Секция загрузки данных -->
-            <section id="upload-section" class="upload-section">
+            <section id="upload-section" class="section">
                 <div class="container">
+                    <h2>Загрузите ваши данные</h2>
                     <div class="upload-area" id="dropZone">
-                        <input type="file" id="csv-file" accept=".csv">
-                        <p>Перетащите CSV файл или нажмите для выбора</p>
+                        <input type="file" id="csv-file" accept=".csv,.xlsx,.xls">
+                        <p>Перетащите CSV или Excel файл сюда или кликните для выбора</p>
                     </div>
-                    <div class="file-format-info">
-                        <span>CSV должен содержать колонки: <code>client_id</code>, <code>date</code>, <code>amount</code></span>
-                        <span>Пример: <code>client_123,2023-05-15,5000</code></span>
-                    </div>
-                    <div class="file-type-helper">
-                        <span class="file-type-tag">CSV</span>
-                        <span class="file-type-tag">До 10 МБ</span>
-                    </div>
-                    <div class="analysis-button-container">
-                        <button id="analyze-button" class="button">Запустить анализ</button>
-                    </div>
-                    <div id="results-container" class="results-grid"></div>
                     
+                    <!-- Блок для выбора столбцов (изначально скрыт) -->
+                    <div id="column-mapping" class="column-mapping hidden">
+                        <h3>Сопоставление столбцов</h3>
+                        <p>Выберите, какие столбцы соответствуют нужным данным:</p>
+                        
+                        <div class="mapping-grid">
+                            <div class="mapping-item">
+                                <label for="client-id-column">ID клиента:</label>
+                                <select id="client-id-column" class="mapping-select"></select>
+                            </div>
+                            
+                            <div class="mapping-item">
+                                <label for="date-column">Дата покупки:</label>
+                                <select id="date-column" class="mapping-select"></select>
+                            </div>
+                            
+                            <div class="mapping-item">
+                                <label for="amount-column">Сумма покупки:</label>
+                                <select id="amount-column" class="mapping-select"></select>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="button-container">
+                        <button id="upload-button" class="button">Загрузить файл</button>
+                        <button id="process-button" class="button hidden">Обработать данные</button>
+                    </div>
+                    
+                    <p class="help-text">Поддерживаются CSV и Excel файлы. Необходимы данные: ID клиента, дата покупки и сумма.</p>
                 </div>
             </section>
 
@@ -279,8 +297,10 @@
 
     <!-- Скрипты -->
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <script src="https://unpkg.com/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
     <script src="supabase-keys.js"></script>
     <script src="app.js"></script>
+
     <script>
         // Функции для работы с модальным окном
         function openPricingModal() {
