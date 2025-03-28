@@ -101,9 +101,8 @@
             </section>
             
             <!-- Секция загрузки данных -->
-            <section id="upload-section" class="section">
+            <section id="upload-section" class="upload-section">
                 <div class="container">
-                    <h2>Загрузите ваши данные</h2>
                     <div class="upload-area" id="dropZone">
                         <input type="file" id="csv-file" accept=".csv">
                         <p>Перетащите CSV файл или нажмите для выбора</p>
@@ -116,10 +115,10 @@
                         <span class="file-type-tag">CSV</span>
                         <span class="file-type-tag">До 10 МБ</span>
                     </div>
-                    <div>
+                    <div class="analysis-button-container">
                         <button id="analyze-button" class="button">Запустить анализ</button>
-                        <div id="results-container" class="results-grid"></div>
                     </div>
+                    <div id="results-container" class="results-grid"></div>
                     
                 </div>
             </section>

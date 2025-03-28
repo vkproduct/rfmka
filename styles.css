@@ -148,7 +148,7 @@ body {
 /* Hero Section */
 .hero {
     text-align: center;
-    padding: var(--spacing-xl) 0;
+    padding: 80px 0 0;
 }
 
 h1 {
@@ -177,6 +177,11 @@ h2 {
 }
 
 /* Upload Section */
+
+.upload-section {
+    margin: var(--spacing-xs) 0;
+}
+
 .section {
     margin: var(--spacing-xl) 0;
 }
@@ -227,6 +232,110 @@ h2 {
     color: var(--secondary-color);
     font-weight: 500;
     font-size: 16px;
+}
+
+/* Analyze Button */
+
+/* Стили для контейнера кнопки */
+.analysis-button-container {
+    display: flex;
+    justify-content: center;
+    margin: var(--spacing-md) 0 var(--spacing-xl);
+}
+
+/* Стили для кнопки анализа */
+#analyze-button {
+    display: block;
+    margin: 0 auto;
+    width: 50%;
+    max-width: 400px;
+    background: var(--primary-color);
+    color: white;
+    padding: var(--spacing-md);
+    border-radius: var(--radius-md);
+    font-weight: 600;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+    text-align: center;
+    letter-spacing: 0.5px;
+}
+
+#analyze-button {
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+}
+
+#analyze-button:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: all 0.6s ease;
+    z-index: -1;
+}
+
+#analyze-button:hover {
+    background: var(--primary-color);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(255, 90, 95, 0.4);
+    color: white;
+}
+
+#analyze-button:hover:before {
+    left: 100%;
+}
+
+#analyze-button:active {
+    transform: translateY(1px);
+    box-shadow: 0 2px 8px rgba(255, 90, 95, 0.4);
+}
+
+/* Пульсирующая анимация для привлечения внимания */
+@keyframes pulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(255, 90, 95, 0.7);
+    }
+    70% {
+        box-shadow: 0 0 0 10px rgba(255, 90, 95, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(255, 90, 95, 0);
+    }
+}
+
+/* Анимация при загрузке страницы */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Применение анимации */
+#analyze-button {
+    animation: fadeInUp 0.8s ease forwards, pulse 2s infinite;
+}
+
+/* Остановка пульсации при наведении */
+#analyze-button:hover {
+    animation: none;
+}
+
+/* Медиа-запрос для адаптивности на мобильных устройствах */
+@media (max-width: 768px) {
+    #analyze-button {
+        width: 80%;
+    }
 }
 
 /* File Info Helpers */
